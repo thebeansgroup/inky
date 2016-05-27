@@ -135,6 +135,38 @@ var inky = new Inky({
 });
 ```
 
+To aid the organisation of new custom elements, a helper named `Inky.createCustomComponents` accepts an object of components.
+
+```js
+// components.inky.js
+
+var format = require('util').format;
+
+module.exports = {
+  box: {
+    js: function (element) {
+      var classes = ['container'];
+      if (element.attr('class')) {
+        classes = classes.concat(element.attr('class').split(' '));
+      }
+
+      return format('<table class="box-wrapper"><tbody><tr><td><table class="%s"><tbody><tr><td>%s</td></tr></tbody></table></td></tr></tbody></table>', classes.join(' '), element.html());
+    }
+  }
+};
+
+
+// index.js
+
+var Inky = require('inky').Inky;
+var format = require('util').format;
+var components = require('./components.inky.js');
+
+var inky = new Inky({
+  components: Inky.createCustomComponents(components)
+});
+```
+
 ## Programmatic Use
 
 The Inky parser can be accessed directly for programmatic use. It takes in a [Cheerio](https://github.com/cheeriojs/cheerio) object of HTML, and gives you back a converted Cheerio object.
